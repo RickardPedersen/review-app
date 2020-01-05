@@ -10,6 +10,8 @@ let apiRouter = require('./routes/api');
 
 let app = express();
 
+// MySQL stuff
+/*
 const mysql = require('mysql');
 const connection = mysql.createConnection({
   host: 'localhost',
@@ -29,6 +31,7 @@ connection.query('SELECT * FROM users', (err,rows) => {
   console.log('Data received from Db:\n');
   console.log(rows);
 });
+*/
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

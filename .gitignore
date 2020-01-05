@@ -161,4 +161,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Request test file
+request.rest
+
 # End of https://www.gitignore.io/api/node,macos,windows
