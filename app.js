@@ -10,6 +10,26 @@ let apiRouter = require('./routes/api');
 
 let app = express();
 
+const mysql = require('mysql');
+const connection = mysql.createConnection({
+  host: 'localhost',
+  port: '10003',
+  user: 'root',
+  password: 'root',
+  database: 'review_app_db'
+});
+connection.connect((err) => {
+  if (err) throw err;
+  console.log('Connected to db!');
+});
+
+connection.query('SELECT * FROM users', (err,rows) => {
+  if(err) throw err;
+
+  console.log('Data received from Db:\n');
+  console.log(rows);
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
