@@ -58,14 +58,17 @@ router.get('/login/:email', function (req, res, next) {
     }
 
     let sql = `SELECT * FROM users WHERE email = '${req.params.email}'`;
-    
+
     db.query(sql, (err, result) => {
         if (err) throw err;
         if (result.length < 1) {
             responseObject.response = 'Not Found';
             return res.status(404).send(responseObject)
         };
+        responseObject.username = result[0].username;
+        responseObject.email = result[0].email;
         responseObject.password = result[0].password;
+        responseObject.roll = result[0].roll;
         res.status(200).send(responseObject);
     });
     

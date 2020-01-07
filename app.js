@@ -14,6 +14,7 @@ let apiRouter = require('./routes/api');
 
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const fetch = require('node-fetch');
 
 let app = express();
 
@@ -78,4 +79,37 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+function authenticateToken(req, res, next) {
+  console.log('TJENA')
+  //const authHeader = req.headers['authorization'];
+  console.log(req.cookies.accessToken)
+  
+  //const token = authHeader && authHeader.split(' ')[1];
+  const token = req.cookies.accessToken;
+  if (token == null) {
+
+    //res.sendStatus(401);
+    console.log('no token')
+    next();
+  } else {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+      if (err) {
+        //res.sendStatus(403);
+        console.log('invalid token')
+        next();
+      } else {
+        console.log('YOU ARE AUTHORIZED')
+        req.user = user;
+        next();
+      }
+    });
+  }
+
+  
+}
+
+//app.all('*', authenticateToken);
+
+//exports.method = authenticateToken;
 module.exports = app;
+
