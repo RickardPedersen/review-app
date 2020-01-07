@@ -12,23 +12,32 @@ let loginRouter = require('./routes/login');
 let usersRouter = require('./routes/users');
 let apiRouter = require('./routes/api');
 
+const bcryptjs = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
 let app = express();
 
 // MySQL stuff
-/*
+
 const mysql = require('mysql');
-const connection = mysql.createConnection({
+const db = mysql.createConnection({
   host: 'localhost',
   port: '10003',
   user: 'root',
   password: 'root',
   database: 'review_app_db'
 });
-connection.connect((err) => {
+db.connect((err) => {
   if (err) throw err;
   console.log('Connected to db!');
 });
 
+app.use(function (req, res, next) {
+  req.db = db;
+  next();
+});
+
+/*
 connection.query('SELECT * FROM users', (err,rows) => {
   if(err) throw err;
 

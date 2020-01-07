@@ -9,19 +9,18 @@
   <% include ./partials/navbar %>
 
   <div class="container">
-    <form>
+    <form action="/createAccount" method="POST">
         <div class="form-group">
-          <label for="exampleInputUsername">Användarnamn</label>
-          <input type="email" class="form-control" id="exampleInputUsername">
+          <label for="usernameInput">Användarnamn</label>
+          <input type="text" class="form-control" id="usernameInput" name="usernameInput">
         </div>
         <div class="form-group">
-            <label for="exampleInputEmail1">Email address</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+            <label for="emailInput">Email address</label>
+            <input type="email" class="form-control" id="emailInput" name="emailInput">
         </div>
         <div class="form-group">
-          <label for="exampleInputPassword1">Password</label>
-          <input type="password" class="form-control" id="exampleInputPassword1">
+          <label for="passwordInput">Password</label>
+          <input type="password" class="form-control" id="passwordInput" name="passwordInput">
         </div>
         <div class="form-group form-check">
           <input type="checkbox" class="form-check-input" id="exampleCheck1">
@@ -32,6 +31,7 @@
   </div>
 
   <% include ./partials/scripts %>
+  <script src="/javascripts/createAccountClient.js"></script>
 </body>
 
 </html>
