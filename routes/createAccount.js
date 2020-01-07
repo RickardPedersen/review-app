@@ -7,7 +7,7 @@ const fetch = require('node-fetch');
 
 const users = [];
 
-router.get('/', function (req, res, next) {
+router.get('/', authenticateToken, function (req, res, next) {
   let user = {}
   if (req.user == undefined) {
     user.status = 'offline'
@@ -15,6 +15,7 @@ router.get('/', function (req, res, next) {
     user.status = 'online'
     user.username = req.user.username
   }
+  console.log(user)
   res.render('createAccount', user);
 });
 
@@ -57,5 +58,24 @@ router.post('/', async function (req, res, next) {
     res.status(500).send();
   }
 });
+
+function authenticateToken(req, res, next) {
+  const token = req.cookies.accessToken;
+  if (token == null) {
+    console.log('no token')
+    next();
+  } else {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+      if (err) {
+        console.log('invalid token')
+        next();
+      } else {
+        console.log('YOU ARE AUTHORIZED')
+        req.user = user;
+        next();
+      }
+    });
+  }
+}
 
 module.exports = router;

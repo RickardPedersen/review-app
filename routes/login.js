@@ -5,7 +5,12 @@ const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const fetch = require('node-fetch');
 
-/* GET home page. */
+router.get('/logout', (req, res) => {
+  res.clearCookie('accessToken');
+  return res.redirect('/');
+});
+
+/* GET login page. */
 router.get('/', authenticateToken, function (req, res, next) {
   console.log(req.user);
   let user = {}
@@ -48,10 +53,10 @@ router.post('/', async (req, res, next) => {
       }
 
       const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: '10s'
+        expiresIn: '100s'
       });
       res.cookie('accessToken', accessToken, {
-        maxAge: 20000,
+        maxAge: 100000,
         httpOnly: true
       });
       //next();
