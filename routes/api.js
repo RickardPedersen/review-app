@@ -6,7 +6,7 @@ router.get('/', function (req, res, next) {
     res.send('api here...');
 });
 
-/* Check if user exists */
+/* Check if user already exists */
 router.get('/getUser/:username/:email', function (req, res, next) {
     let db = req.db
     
@@ -47,6 +47,28 @@ router.post('/createAccount', function (req, res, next) {
         console.log(result)
         res.status(201).send(responseObject);
     });
+});
+
+/* Log in user */
+router.get('/login/:email', function (req, res, next) {
+    let db = req.db
+    
+    let responseObject = {
+        response: "OK"
+    }
+
+    let sql = `SELECT * FROM users WHERE email = '${req.params.email}'`;
+    
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        if (result.length < 1) {
+            responseObject.response = 'Not Found';
+            return res.status(404).send(responseObject)
+        };
+        responseObject.password = result[0].password;
+        res.status(200).send(responseObject);
+    });
+    
 });
 
 module.exports = router;
