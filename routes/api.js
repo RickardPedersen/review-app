@@ -6,8 +6,26 @@ router.get('/', function (req, res, next) {
     res.send('api here...');
 });
 
+/* Check if user exists */
+router.get('/getUser/:username/:email', function (req, res, next) {
+    let db = req.db
+    
+    let responseObject = {
+        response: "OK",
+        exists: false
+    }
 
-/* Create account */
+    let sql = `SELECT * FROM users WHERE username = '${req.params.username}' OR email = '${req.params.email}'`;
+
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        if (result.length > 0) responseObject.exists = true;
+        res.status(200).send(responseObject);
+    });
+});
+
+
+/* POST (create) account */
 router.post('/createAccount', function (req, res, next) {
     let db = req.db
 
@@ -23,6 +41,7 @@ router.post('/createAccount', function (req, res, next) {
     }
 
     let sql = 'INSERT INTO users SET ?';
+
     db.query(sql, post, (err, result) => {
         if (err) throw err;
         console.log(result)

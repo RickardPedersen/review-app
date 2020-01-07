@@ -32,6 +32,16 @@ router.post('/', async function (req, res, next) {
     };
     users.push(user);
 
+    /* Check if user already exists */
+    let checkUser = await fetch(`http://localhost:3000/api/getUser/${req.body.usernameInput}/${req.body.emailInput}`)
+    .then(response => response.json());
+
+    if (checkUser.exists === true) {
+      console.log('Username or email already in use')
+      return res.redirect('/createAccount');
+    };
+
+    /* Create user */
     await fetch('http://localhost:3000/api/createAccount', {
       method: 'POST',
       headers: {
@@ -40,10 +50,10 @@ router.post('/', async function (req, res, next) {
       body: JSON.stringify(user)
     }).then(response => response.json()).then(data => {
       console.log(data)
+      console.log('Account created');
     });
 
     res.redirect('/createAccount');
-    //console.log(results)
   } catch {
     res.status(500).send();
   }
