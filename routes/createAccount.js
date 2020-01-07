@@ -8,17 +8,16 @@ const fetch = require('node-fetch');
 const users = [];
 
 router.get('/', function (req, res, next) {
-  res.render('createAccount');
+  let user = {}
+  if (req.user == undefined) {
+    user.status = 'offline'
+  } else {
+    user.status = 'online'
+    user.username = req.user.username
+  }
+  res.render('createAccount', user);
 });
 
-/*
-router.post('/', (req, res) => {
-  console.log(req.body);
-  //console.log(req.body.emailInput);
-  //console.log(req.body.passwordInput);
-  
-});
-*/
 
 /* POST (create) user */
 router.post('/', async function (req, res, next) {

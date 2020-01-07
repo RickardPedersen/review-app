@@ -38,14 +38,6 @@ app.use(function (req, res, next) {
   next();
 });
 
-/*
-connection.query('SELECT * FROM users', (err,rows) => {
-  if(err) throw err;
-
-  console.log('Data received from Db:\n');
-  console.log(rows);
-});
-*/
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -79,37 +71,4 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-function authenticateToken(req, res, next) {
-  console.log('TJENA')
-  //const authHeader = req.headers['authorization'];
-  console.log(req.cookies.accessToken)
-  
-  //const token = authHeader && authHeader.split(' ')[1];
-  const token = req.cookies.accessToken;
-  if (token == null) {
-
-    //res.sendStatus(401);
-    console.log('no token')
-    next();
-  } else {
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-      if (err) {
-        //res.sendStatus(403);
-        console.log('invalid token')
-        next();
-      } else {
-        console.log('YOU ARE AUTHORIZED')
-        req.user = user;
-        next();
-      }
-    });
-  }
-
-  
-}
-
-//app.all('*', authenticateToken);
-
-//exports.method = authenticateToken;
 module.exports = app;
-
