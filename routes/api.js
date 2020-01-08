@@ -146,4 +146,21 @@ router.get('/getRestaurant/:name', (req, res, next) => {
     });
 });
 
+router.delete('/deleteRestaurant', (req, res, next) => {
+    let db = req.db
+    
+    let responseObject = {
+        response: "OK"
+    }
+
+    let sql = `DELETE FROM restaurants WHERE name = '${req.body.name}'`;
+
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        console.log(result);
+        //responseObject.data = result;
+        res.status(200).send(responseObject);
+    });
+});
+
 module.exports = router;

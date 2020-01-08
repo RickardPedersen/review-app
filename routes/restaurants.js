@@ -90,5 +90,19 @@ router.post('/addRestaurants', async function (req, res, next) {
 
 });
 
+router.get('/delete/:name', async (req, res, next) =>{
+    await fetch(`http://localhost:3000/api/deleteRestaurant`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({name: req.params.name})
+    }).then(response => response.json()).then(data => {
+        console.log(data)
+        console.log('Restaurant deleted');
+        res.redirect('/restaurants');
+    });
+});
+
 
 module.exports = router;
