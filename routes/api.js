@@ -1,13 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET api */
-router.get('/', function (req, res, next) {
-    res.send('api here...');
-});
-
-/* Check if user already exists */
-router.get('/getUser/:username/:email', function (req, res, next) {
+/* GET: check if username or email already exists in database */
+router.get('/getUser/:username/:email', (req, res) => {
     let db = req.db
 
     let responseObject = {
@@ -24,10 +19,9 @@ router.get('/getUser/:username/:email', function (req, res, next) {
     });
 });
 
-
-/* POST (create) account */
-router.post('/createAccount', function (req, res, next) {
-    let db = req.db
+/* POST: create account */
+router.post('/createAccount', (req, res) => {
+    let db = req.db;
 
     let responseObject = {
         response: "Created",
@@ -44,13 +38,12 @@ router.post('/createAccount', function (req, res, next) {
 
     db.query(sql, post, (err, result) => {
         if (err) throw err;
-        console.log(result)
         res.status(201).send(responseObject);
     });
 });
 
-/* Log in user */
-router.get('/login/:email', function (req, res, next) {
+/* GET: log in user */
+router.get('/login/:email', function (req, res) {
     let db = req.db
 
     let responseObject = {
@@ -65,17 +58,18 @@ router.get('/login/:email', function (req, res, next) {
             responseObject.response = 'Not Found';
             return res.status(404).send(responseObject)
         };
+
+        /* Send back user data */
         responseObject.username = result[0].username;
         responseObject.email = result[0].email;
         responseObject.password = result[0].password;
         responseObject.roll = result[0].roll;
         res.status(200).send(responseObject);
     });
-
 });
 
-/* Check if restaurant already exists */
-router.get('/checkRestaurant/:name', function (req, res, next) {
+/* GET: check if restaurant already exists in database */
+router.get('/checkRestaurant/:name', (req, res) => {
     let db = req.db
 
     let responseObject = {
@@ -92,7 +86,8 @@ router.get('/checkRestaurant/:name', function (req, res, next) {
     });
 });
 
-router.post('/addRestaurant', (req, res, next) => {
+/* POST: add restaurant to database */
+router.post('/addRestaurant', (req, res) => {
     let db = req.db
 
     let responseObject = {
@@ -109,74 +104,71 @@ router.post('/addRestaurant', (req, res, next) => {
 
     db.query(sql, post, (err, result) => {
         if (err) throw err;
-        console.log(result)
         res.status(201).send(responseObject);
     });
 });
 
-router.get('/getRestaurants', (req, res, next) => {
+/* GET: get ten highest rated restaurants */
+router.get('/getRestaurants', (req, res) => {
     let db = req.db
 
     let responseObject = {
         response: "OK"
     }
 
-    //let sql = 'SELECT * FROM restaurants';
-
-    let sql = 'SELECT *,' +
-        '(SELECT ROUND(AVG(rating), 1) ' +
-        'FROM reviews ' +
-        'WHERE reviews.restaurantID = restaurants.restaurantID) AS avgRating ' +
-        'FROM restaurants ' +
-        'ORDER BY avgRating desc ' +
-        'LIMIT 10';
+    /* Aggregate function that calculate restaurants avrage rating */
+    let sql = `SELECT *,
+        (SELECT ROUND(AVG(rating), 1)
+        FROM reviews
+        WHERE reviews.restaurantID = restaurants.restaurantID) AS avgRating
+        FROM restaurants
+        ORDER BY avgRating desc
+        LIMIT 10`;
 
     db.query(sql, (err, result) => {
         if (err) throw err;
-        console.log(result)
         responseObject.data = result;
         res.status(200).send(responseObject);
     });
 });
 
-router.get('/getRestaurantsByGenre/:genre', (req, res, next) => {
+/* GET: gets all restaurants by specific genre */
+router.get('/getRestaurantsByGenre/:genre', (req, res) => {
     let db = req.db
 
     let responseObject = {
         response: "OK"
     }
 
-    //let sql = 'SELECT * FROM restaurants';
-
-    let sql = 'SELECT *,' +
-        '(SELECT ROUND(AVG(rating), 1) ' +
-        'FROM reviews ' +
-        'WHERE reviews.restaurantID = restaurants.restaurantID) AS avgRating ' +
-        'FROM restaurants ' +
-        `WHERE genre = ${db.escape(req.params.genre)} ` +
-        'ORDER BY avgRating desc';
+    /* Aggregate function that calculate restaurants avrage rating */
+    let sql = `SELECT *,
+        (SELECT ROUND(AVG(rating), 1)
+        FROM reviews
+        WHERE reviews.restaurantID = restaurants.restaurantID) AS avgRating
+        FROM restaurants
+        WHERE genre = ${db.escape(req.params.genre)}
+        ORDER BY avgRating desc`;
 
     db.query(sql, (err, result) => {
         if (err) throw err;
-        console.log(result)
         responseObject.data = result;
         res.status(200).send(responseObject);
     });
 });
 
-router.get('/getRestaurant/:name', (req, res, next) => {
+/* GET: get specific restaurant */
+router.get('/getRestaurant/:name', (req, res) => {
     let db = req.db
 
     let responseObject = {
         response: "OK"
     }
 
-    //let sql = `SELECT * FROM restaurants WHERE name = '${req.params.name}'`;
-
+    /* Aggregate function that calculate restaurants avrage rating */
     let sql = `SELECT *, 
-               (SELECT ROUND(AVG(rating), 1) FROM review_app_db.reviews 
-               WHERE review_app_db.reviews.restaurantID = review_app_db.restaurants.restaurantID) AS avgRating
-               FROM review_app_db.restaurants
+               (SELECT ROUND(AVG(rating), 1) FROM reviews 
+               WHERE reviews.restaurantID = restaurants.restaurantID) AS avgRating
+               FROM restaurants
                WHERE name = ${db.escape(req.params.name)}`
 
     db.query(sql, (err, result) => {
@@ -186,7 +178,8 @@ router.get('/getRestaurant/:name', (req, res, next) => {
     });
 });
 
-router.delete('/deleteRestaurant', (req, res, next) => {
+/* DELETE: deletes a restaurant */
+router.delete('/deleteRestaurant', (req, res) => {
     let db = req.db
 
     let responseObject = {
@@ -197,13 +190,12 @@ router.delete('/deleteRestaurant', (req, res, next) => {
 
     db.query(sql, (err, result) => {
         if (err) throw err;
-        console.log(result);
-        //responseObject.data = result;
         res.status(200).send(responseObject);
     });
 });
 
-router.put('/editRestaurant', (req, res, next) => {
+/* PUT: edits a restaurant */
+router.put('/editRestaurant', (req, res) => {
     let db = req.db
 
     let responseObject = {
@@ -211,18 +203,19 @@ router.put('/editRestaurant', (req, res, next) => {
     }
 
     let sql = `UPDATE restaurants
-               SET name = ${db.escape(req.body.newName)}, genre = ${db.escape(req.body.newGenre)}, location = ${db.escape(req.body.newLocation)}
+               SET name = ${db.escape(req.body.newName)},
+               genre = ${db.escape(req.body.newGenre)},
+               location = ${db.escape(req.body.newLocation)}
                WHERE name = ${db.escape(req.body.oldName)}`;
 
     db.query(sql, (err, result) => {
         if (err) throw err;
-        console.log(result);
-        //responseObject.data = result;
         res.status(200).send(responseObject);
     });
 });
 
-router.get('/getReviews/:restaurantID', (req, res, next) => {
+/* GET: gets reviews for specific restaurant */
+router.get('/getReviews/:restaurantID', (req, res) => {
     let db = req.db
 
     let responseObject = {
@@ -236,10 +229,10 @@ router.get('/getReviews/:restaurantID', (req, res, next) => {
         responseObject.data = result;
         res.status(200).send(responseObject);
     });
-
 });
 
-router.post('/addReview', (req, res, next) => {
+/* POST: add review to database */
+router.post('/addReview', (req, res) => {
     let db = req.db
 
     let responseObject = {
@@ -261,7 +254,8 @@ router.post('/addReview', (req, res, next) => {
     });
 });
 
-router.get('/getGenres', (req, res, next) => {
+/* GET: get all genres from database */
+router.get('/getGenres', (req, res) => {
     let db = req.db
 
     let responseObject = {
