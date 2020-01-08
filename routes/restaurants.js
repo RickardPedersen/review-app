@@ -239,12 +239,18 @@ router.get('/review', authenticateToken, async (req, res, next) => {
     });
 });
 
-router.post('/review', async function (req, res, next) {
-
-
+router.post('/review', authenticateToken, async function (req, res, next) {
+    let user = req.user || {};
+    if (req.user == undefined) {
+        user.status = 'offline'
+    } else {
+        user.status = 'online'
+    }
+    if (user.status != 'online') return res.redirect('/login');
+    console.log(user);
 
     let review = {
-        username: 'test',
+        username: user.username,
         restaurantID: req.body.restaurantInput,
         rating: req.body.ratingInput,
         message: req.body.messageInput

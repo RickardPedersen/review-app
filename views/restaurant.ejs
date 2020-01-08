@@ -11,11 +11,19 @@
 
     <div class="container">
         <div class="card">
-            <h5 class="card-header"><%= restaurant.name %> <%= restaurant.avgRating %> / 5</h5>
+          <h5 class="card-header"><%= restaurant.name %> 
+            <% if (restaurant.avgRating != null) { %>
+              <span class="badge badge-info"><%= restaurant.avgRating %> / 5</span>
+              
+              <% } else { %>
+                  <span class="badge badge-secondary">Inget betyg</span>
+              
+              <% } %>
+          
+            </h5>
             <div class="card-body">
-                <h5 class="card-title"><%= restaurant.genre %></h5>
                 <h5 class="card-title"><%= restaurant.location %></h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                <h5 class="card-title"><%= restaurant.genre %></h5>
                 <a href="/restaurants/review" class="btn btn-primary">Skriv recension</a>
                 <% if (user.roll == 'admin') { %>
                 <a href="/restaurants/edit/<%= restaurant.name %>" class="btn btn-warning">Redigera restaurang</a>
@@ -24,7 +32,7 @@
             </div>
         </div>
 
-        <div>Recensioner: </div>
+        <h1 class="display-4">Recensioner:</h1>
 
         <div class="list-group">
             <% for (review of reviews) { %>

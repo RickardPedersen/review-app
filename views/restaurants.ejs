@@ -30,16 +30,23 @@
 
             <a href="/restaurants/restaurant/<%= restaurant.name %>" class="list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-between">
-                  <h5 class="mb-1"><%= restaurant.name %></h5>
-                  <h5 class="mb-1">Betyg: <%= restaurant.avgRating %> / 5</h5>
+                    <h5 class="mb-1"><%= restaurant.name %></h5>
+                    <h5 class="mb-1"><% if (restaurant.avgRating != null) { %>
+                        <span class="badge badge-info"><%= restaurant.avgRating %> / 5</span>
+                        
+                        <% } else { %>
+                            <span class="badge badge-secondary">Inget betyg</span>
+                        
+                        <% } %>
+                    </h5>
                 </div>
-                <p class="mb-1">asdfa</p>
-                <p class="mb-1">asdfa</p>
-              </a>
+                <p class="mb-1"><%= restaurant.location %></p>
+                <p class="mb-1"><%= restaurant.genre %></p>
+            </a>
             <% } %>
         </div>
 
-        
+
     </div>
 
     <% include ./partials/scripts %>
