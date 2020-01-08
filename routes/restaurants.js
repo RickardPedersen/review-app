@@ -104,5 +104,65 @@ router.get('/delete/:name', async (req, res, next) =>{
     });
 });
 
+router.get('/edit/:name', async (req, res, next) =>{
+    let user = {}
+    if (req.user == undefined) {
+        user.status = 'offline'
+    } else {
+        user.status = 'online'
+        user.username = req.user.username
+    }
+    console.log(user)
+
+    let restaurant = await fetch(`http://localhost:3000/api/getRestaurant/${req.params.name}`)
+        .then(response => response.json());
+        console.log(restaurant)
+    res.render('editRestaurant', {
+        user: user,
+        restaurant: restaurant.data[0]
+    });
+});
+
+
+router.post('/edit/:oldName', async (req, res, next) =>{
+    console.log(req.params.oldName)
+    console.log(req.body.nameInput)
+    console.log(req.body.genreInput)
+    console.log(req.body.locationInput)
+    //res.redirect('/restaurants')
+
+    let checkRestaurant = await fetch(`http://localhost:3000/api/checkRestaurant/${req.body.nameInput}`)
+        .then(response => response.json());
+
+    if (checkRestaurant.exists === true && req.params.oldName !== req.body.nameInput) {
+        console.log('Restaurant already exists')
+        return res.redirect('/restaurants');
+    }
+        console.log('DOES NOT EXIST')
+        
+    let restaurant = {
+        oldName: req.params.oldName,
+        newName: req.body.nameInput,
+        newGenre: req.body.genreInput,
+        newLocation: req.body.locationInput
+    }
+
+    
+    await fetch(`http://localhost:3000/api/editRestaurant`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(restaurant)
+    }).then(response => response.json()).then(data => {
+        console.log(data)
+        console.log('Restaurant updated');
+        res.redirect('/restaurants');
+    });
+    
+   //res.redirect('/restaurants');
+});
+
+
 
 module.exports = router;

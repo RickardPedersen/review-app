@@ -163,4 +163,23 @@ router.delete('/deleteRestaurant', (req, res, next) => {
     });
 });
 
+router.put('/editRestaurant', (req, res, next) => {
+    let db = req.db
+    
+    let responseObject = {
+        response: "OK"
+    }
+
+    let sql = `UPDATE restaurants
+               SET name = '${req.body.newName}', genre = '${req.body.newGenre}', location = '${req.body.newLocation}'
+               WHERE name = '${req.body.oldName}'`;
+
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        console.log(result);
+        //responseObject.data = result;
+        res.status(200).send(responseObject);
+    });
+});
+
 module.exports = router;
