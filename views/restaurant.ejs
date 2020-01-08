@@ -13,13 +13,27 @@
         <div class="card">
             <h5 class="card-header"><%= restaurant.name %></h5>
             <div class="card-body">
-              <h5 class="card-title"><%= restaurant.genre %></h5>
-              <h5 class="card-title"><%= restaurant.location %></h5>
-              <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-              <a href="#" class="btn btn-primary">Skriv recension</a>
-              <a href="/restaurants/edit/<%= restaurant.name %>" class="btn btn-warning">Redigera restaurang</a>
-              <a href="/restaurants/delete/<%= restaurant.name %>" class="btn btn-danger">Ta bort restaurang</a>
+                <h5 class="card-title"><%= restaurant.genre %></h5>
+                <h5 class="card-title"><%= restaurant.location %></h5>
+                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                <a href="/restaurants/review" class="btn btn-primary">Skriv recension</a>
+                <a href="/restaurants/edit/<%= restaurant.name %>" class="btn btn-warning">Redigera restaurang</a>
+                <a href="/restaurants/delete/<%= restaurant.name %>" class="btn btn-danger">Ta bort restaurang</a>
             </div>
+        </div>
+
+        <div>Recensioner: </div>
+
+        <div class="list-group">
+            <% for (review of reviews) { %>
+            <a href="" class="list-group-item list-group-item-action">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1"><%= review.username %></h5>
+                <h5 class="mb-1"><%= review.rating %>/5</h5>
+              </div>
+              <p class="mb-1"><%= review.message %></p>
+            </a>
+            <% } %>
           </div>
     </div>
 

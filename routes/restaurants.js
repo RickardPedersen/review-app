@@ -37,10 +37,16 @@ router.get('/restaurant/:name', authenticateToken, async function (req, res, nex
 
     let restaurant = await fetch(`http://localhost:3000/api/getRestaurant/${req.params.name}`)
         .then(response => response.json());
-        console.log(restaurant)
+
+    let reviews = await fetch(`http://localhost:3000/api/getReviews/${restaurant.data[0].restaurantID}`)
+    .then(response => response.json());
+    console.log(reviews)
+
+        //console.log(restaurant)
     res.render('restaurant', {
         user: user,
-        restaurant: restaurant.data[0]
+        restaurant: restaurant.data[0],
+        reviews: reviews.data
     });
 });
 
@@ -163,6 +169,49 @@ router.post('/edit/:oldName', async (req, res, next) =>{
    //res.redirect('/restaurants');
 });
 
+router.get('/review', async (req, res, next) => {
+    let user = {}
+    if (req.user == undefined) {
+        user.status = 'offline'
+    } else {
+        user.status = 'online'
+        user.username = req.user.username
+    }
 
+    let restaurants = await fetch(`http://localhost:3000/api/getAllRestaurants`)
+        .then(response => response.json());
+    res.render('review', {
+        user: user,
+        restaurants: restaurants.data
+    });
+});
+
+router.post('/review', async function (req, res, next) {
+    
+
+    
+    let review = {
+        username: 'test',
+        restaurantID: req.body.restaurantInput,
+        rating: req.body.ratingInput,
+        message: req.body.messageInput
+    }
+    //console.log(review)
+
+    await fetch('http://localhost:3000/api/addReview', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(review)
+    }).then(response => response.json()).then(data => {
+        console.log(data)
+        console.log('Review created');
+    });
+
+    //return res.redirect('/restaurants/addRestaurants');
+    
+   res.redirect('/restaurants/review');
+});
 
 module.exports = router;

@@ -9,7 +9,7 @@ router.get('/', function (req, res, next) {
 /* Check if user already exists */
 router.get('/getUser/:username/:email', function (req, res, next) {
     let db = req.db
-    
+
     let responseObject = {
         response: "OK",
         exists: false
@@ -52,7 +52,7 @@ router.post('/createAccount', function (req, res, next) {
 /* Log in user */
 router.get('/login/:email', function (req, res, next) {
     let db = req.db
-    
+
     let responseObject = {
         response: "OK"
     }
@@ -71,13 +71,13 @@ router.get('/login/:email', function (req, res, next) {
         responseObject.roll = result[0].roll;
         res.status(200).send(responseObject);
     });
-    
+
 });
 
 /* Check if restaurant already exists */
 router.get('/checkRestaurant/:name', function (req, res, next) {
     let db = req.db
-    
+
     let responseObject = {
         response: "OK",
         exists: false
@@ -116,7 +116,7 @@ router.post('/addRestaurant', (req, res, next) => {
 
 router.get('/getAllRestaurants', (req, res, next) => {
     let db = req.db
-    
+
     let responseObject = {
         response: "OK"
     }
@@ -132,7 +132,7 @@ router.get('/getAllRestaurants', (req, res, next) => {
 
 router.get('/getRestaurant/:name', (req, res, next) => {
     let db = req.db
-    
+
     let responseObject = {
         response: "OK"
     }
@@ -148,7 +148,7 @@ router.get('/getRestaurant/:name', (req, res, next) => {
 
 router.delete('/deleteRestaurant', (req, res, next) => {
     let db = req.db
-    
+
     let responseObject = {
         response: "OK"
     }
@@ -165,7 +165,7 @@ router.delete('/deleteRestaurant', (req, res, next) => {
 
 router.put('/editRestaurant', (req, res, next) => {
     let db = req.db
-    
+
     let responseObject = {
         response: "OK"
     }
@@ -179,6 +179,48 @@ router.put('/editRestaurant', (req, res, next) => {
         console.log(result);
         //responseObject.data = result;
         res.status(200).send(responseObject);
+    });
+});
+
+router.get('/getReviews/:restaurantID', (req, res, next) => {
+    let db = req.db
+
+    let responseObject = {
+        response: "OK"
+    }
+    console.log(req.params.restaurantID)
+
+    
+    let sql = `SELECT * FROM reviews WHERE restaurantID = ${req.params.restaurantID}`;
+
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        responseObject.data = result;
+        res.status(200).send(responseObject);
+    });
+    
+});
+
+router.post('/addReview', (req, res, next) => {
+    let db = req.db
+
+    let responseObject = {
+        response: "Created",
+    }
+
+    let post = {
+        username: req.body.username,
+        restaurantID: req.body.restaurantID,
+        rating: req.body.rating,
+        message: req.body.message
+    }
+
+    let sql = 'INSERT INTO reviews SET ?';
+
+    db.query(sql, post, (err, result) => {
+        if (err) throw err;
+        console.log(result)
+        res.status(201).send(responseObject);
     });
 });
 
