@@ -10,7 +10,21 @@
 
 
     <div class="container">
-        <h1 class="display-4">Restauranger</h1>
+        <h1 class="display-4">Vad är du sugen på?</h1>
+        <form action="/restaurants/genres" method="POST">
+            <div class="form-group">
+                <select class="custom-select" id="genreInput" name="genreInput">
+                    <option selected>Välj genre...</option>
+                    <% for (genre of genres) { %>
+                    <option value="<%= genre.genre %>"><%= genre.genre %></option>
+                    <% } %>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Se restauranger</button>
+        </form>
+
+        <h1 class="display-4"><%= title %></h1>
         <div class="list-group">
             <% for (restaurant of restaurants) { %>
 
@@ -24,6 +38,8 @@
               </a>
             <% } %>
         </div>
+
+        
     </div>
 
     <% include ./partials/scripts %>

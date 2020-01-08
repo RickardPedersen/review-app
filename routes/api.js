@@ -114,7 +114,7 @@ router.post('/addRestaurant', (req, res, next) => {
     });
 });
 
-router.get('/getAllRestaurants', (req, res, next) => {
+router.get('/getRestaurants', (req, res, next) => {
     let db = req.db
 
     let responseObject = {
@@ -130,6 +130,31 @@ router.get('/getAllRestaurants', (req, res, next) => {
         'FROM restaurants ' +
         'ORDER BY avgRating desc ' +
         'LIMIT 10';
+
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        console.log(result)
+        responseObject.data = result;
+        res.status(200).send(responseObject);
+    });
+});
+
+router.get('/getRestaurantsByGenre/:genre', (req, res, next) => {
+    let db = req.db
+
+    let responseObject = {
+        response: "OK"
+    }
+
+    //let sql = 'SELECT * FROM restaurants';
+
+    let sql = 'SELECT *,' +
+        '(SELECT ROUND(AVG(rating), 1) ' +
+        'FROM reviews ' +
+        'WHERE reviews.restaurantID = restaurants.restaurantID) AS avgRating ' +
+        'FROM restaurants ' +
+        `WHERE genre = ${db.escape(req.params.genre)} ` +
+        'ORDER BY avgRating desc';
 
     db.query(sql, (err, result) => {
         if (err) throw err;

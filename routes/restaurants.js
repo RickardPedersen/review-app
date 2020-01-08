@@ -16,13 +16,47 @@ router.get('/', authenticateToken, async function (req, res, next) {
     }
     console.log(user);
 
-    let restaurants = await fetch(`http://localhost:3000/api/getAllRestaurants`)
+    let restaurants = await fetch(`http://localhost:3000/api/getRestaurants`)
         .then(response => response.json());
+
+    let genres = await fetch(`http://localhost:3000/api/getGenres`)
+    .then(response => response.json());
+    console.log(genres)
 
         
     res.render('restaurants', {
         user: user,
-        restaurants: restaurants.data
+        restaurants: restaurants.data,
+        genres: genres.data,
+        title: 'Topplista'
+    });
+});
+
+router.post('/genres', (req, res, next) => {
+    res.redirect(`/restaurants/genres/${req.body.genreInput}`);
+})
+
+router.get('/genres/:genre', async (req, res, next) => {
+    let user = req.user || {};
+    if (req.user == undefined) {
+        user.status = 'offline'
+    } else {
+        user.status = 'online'
+    }
+    console.log(user);
+
+    let restaurants = await fetch(`http://localhost:3000/api/getRestaurantsByGenre/${req.params.genre}`)
+        .then(response => response.json());
+
+    let genres = await fetch(`http://localhost:3000/api/getGenres`)
+    .then(response => response.json());
+    console.log(genres)
+    console.log(req.params.genre)
+    res.render('restaurants', {
+        user: user,
+        restaurants: restaurants.data,
+        genres: genres.data,
+        title: req.params.genre
     });
 });
 
@@ -198,7 +232,7 @@ router.get('/review', authenticateToken, async (req, res, next) => {
     if (user.status != 'online') return res.redirect('/login');
     console.log(user);
 
-    let restaurants = await fetch(`http://localhost:3000/api/getAllRestaurants`)
+    let restaurants = await fetch(`http://localhost:3000/api/getRestaurants`)
         .then(response => response.json());
     res.render('review', {
         user: user,
