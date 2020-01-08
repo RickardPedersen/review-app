@@ -15,19 +15,15 @@ let apiRouter = require('./routes/api');
 let app = express();
 
 
-/* MySQL connection */
+/* MySQL connection pool */
 const mysql = require('mysql');
-const db = mysql.createConnection({
+const db = mysql.createPool({
+  connectionLimit : 10,
   host: process.env.MYSQL_HOST,
   port: process.env.MYSQL_PORT,
   user: process.env.MYSQL_USER,
   password: process.env.MYSQL_PASSWORD,
   database: process.env.MYSQL_DATABASE
-});
-
-db.connect((err) => {
-  if (err) throw err;
-  console.log('Connected to db!');
 });
 
 app.use(function (req, res, next) {
