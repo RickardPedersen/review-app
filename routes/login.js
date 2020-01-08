@@ -25,7 +25,9 @@ router.get('/', authenticateToken, function (req, res, next) {
   console.log(user);
 
 
-  res.render('login', user);
+  res.render('login', {
+    user: user
+});
 });
 
 /* Log in user */

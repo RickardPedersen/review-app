@@ -18,7 +18,9 @@ router.get('/', authenticateToken, function (req, res, next) {
     user.username = req.user.username
   }
   console.log(user)
-  res.render('createAccount', user);
+  res.render('createAccount', {
+    user: user
+});
 });
 
 

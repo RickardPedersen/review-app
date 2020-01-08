@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ./partials/head %>
+</head>
+
+<body>
+    <% include ./partials/navbar %>
+
+
+    <div class="container">
+        <ul class="list-group">
+            <% for (restaurant of restaurants) { %>
+            <li class="list-group-item"><a href="/restaurants/<%= restaurant.name %>"><%= restaurant.name %></a></li>
+            <% } %>
+        </ul>
+    </div>
+
+    <% include ./partials/scripts %>
+</body>
+
+</html>

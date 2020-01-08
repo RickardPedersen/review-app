@@ -7,6 +7,24 @@ const fetch = require('node-fetch');
 
 const authenticateToken = require('../authorization-module');
 
+router.get('/', authenticateToken, async function (req, res, next) {
+    let user = {}
+    if (req.user == undefined) {
+      user.status = 'offline'
+    } else {
+      user.status = 'online'
+      user.username = req.user.username
+    }
+    console.log(user)
+
+    let restaurants = await fetch(`http://localhost:3000/api/getAllRestaurants`)
+        .then(response => response.json());
+    res.render('restaurants', {
+        user: user,
+        restaurants: restaurants.data
+    });
+  });
+
 router.get('/addRestaurants', authenticateToken, function (req, res, next) {
     console.log(req.user)
     let user = {}
@@ -16,7 +34,9 @@ router.get('/addRestaurants', authenticateToken, function (req, res, next) {
         user.status = 'online'
         user.username = req.user.username
     }
-    res.render('addRestaurants', user);
+    res.render('addRestaurants', {
+        user: user
+    });
 });
 
 router.post('/addRestaurants', async function (req, res, next) {

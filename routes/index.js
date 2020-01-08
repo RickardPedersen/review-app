@@ -17,7 +17,9 @@ router.get('/', authenticateToken, function(req, res, next) {
     user.status = 'online'
     user.username = req.user.username
   }
-  res.render('index', user);
+  res.render('index', {
+    user: user
+});
 });
 
 /*
