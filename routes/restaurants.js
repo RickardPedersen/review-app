@@ -173,7 +173,6 @@ router.get('/edit/:name', authenticateToken, async (req, res, next) => {
 
         let genres = await fetch(`http://localhost:3000/api/getGenres`)
         .then(response => response.json());
-        console.log(genres);
 
     res.render('editRestaurant', {
         user: user,
