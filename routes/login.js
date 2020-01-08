@@ -14,20 +14,16 @@ router.get('/logout', (req, res) => {
 
 /* GET login page. */
 router.get('/', authenticateToken, function (req, res, next) {
-  console.log(req.user);
-  let user = {}
+  let user = req.user || {};
   if (req.user == undefined) {
     user.status = 'offline'
   } else {
     user.status = 'online'
-    user.username = req.user.username
   }
   console.log(user);
-
-
   res.render('login', {
     user: user
-});
+  });
 });
 
 /* Log in user */
@@ -53,14 +49,15 @@ router.post('/', async (req, res, next) => {
 
       const user = {
         username: userData.username,
-        email: userData.email
+        email: userData.email,
+        roll: userData.roll
       }
 
       const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: '100s'
+        expiresIn: '600s'
       });
       res.cookie('accessToken', accessToken, {
-        maxAge: 100000,
+        maxAge: 600000,
         httpOnly: true
       });
       //next();

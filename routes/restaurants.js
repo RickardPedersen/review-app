@@ -8,14 +8,13 @@ const fetch = require('node-fetch');
 const authenticateToken = require('../authorization-module');
 
 router.get('/', authenticateToken, async function (req, res, next) {
-    let user = {}
+    let user = req.user || {};
     if (req.user == undefined) {
         user.status = 'offline'
     } else {
         user.status = 'online'
-        user.username = req.user.username
     }
-    console.log(user)
+    console.log(user);
 
     let restaurants = await fetch(`http://localhost:3000/api/getAllRestaurants`)
         .then(response => response.json());
@@ -26,23 +25,20 @@ router.get('/', authenticateToken, async function (req, res, next) {
 });
 
 router.get('/restaurant/:name', authenticateToken, async function (req, res, next) {
-    let user = {}
+    let user = req.user || {};
     if (req.user == undefined) {
         user.status = 'offline'
     } else {
         user.status = 'online'
-        user.username = req.user.username
     }
-    console.log(user)
+    console.log(user);
 
     let restaurant = await fetch(`http://localhost:3000/api/getRestaurant/${req.params.name}`)
         .then(response => response.json());
 
     let reviews = await fetch(`http://localhost:3000/api/getReviews/${restaurant.data[0].restaurantID}`)
-    .then(response => response.json());
-    console.log(reviews)
+        .then(response => response.json());
 
-        //console.log(restaurant)
     res.render('restaurant', {
         user: user,
         restaurant: restaurant.data[0],
@@ -51,14 +47,14 @@ router.get('/restaurant/:name', authenticateToken, async function (req, res, nex
 });
 
 router.get('/addRestaurants', authenticateToken, function (req, res, next) {
-    console.log(req.user)
-    let user = {}
+    let user = req.user || {};
     if (req.user == undefined) {
         user.status = 'offline'
     } else {
         user.status = 'online'
-        user.username = req.user.username
     }
+    console.log(user);
+    if (user.roll != 'admin') return res.redirect('/');
     res.render('addRestaurants', {
         user: user
     });
@@ -96,13 +92,25 @@ router.post('/addRestaurants', async function (req, res, next) {
 
 });
 
-router.get('/delete/:name', async (req, res, next) =>{
+router.get('/delete/:name', authenticateToken, async (req, res, next) => {
+    let user = req.user || {};
+    if (req.user == undefined) {
+        user.status = 'offline'
+    } else {
+        user.status = 'online'
+    }
+    console.log(user);
+    if (user.roll !== 'admin') return res.redirect('/');
+    
+
     await fetch(`http://localhost:3000/api/deleteRestaurant`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({name: req.params.name})
+        body: JSON.stringify({
+            name: req.params.name
+        })
     }).then(response => response.json()).then(data => {
         console.log(data)
         console.log('Restaurant deleted');
@@ -110,19 +118,19 @@ router.get('/delete/:name', async (req, res, next) =>{
     });
 });
 
-router.get('/edit/:name', async (req, res, next) =>{
-    let user = {}
+router.get('/edit/:name', authenticateToken, async (req, res, next) => {
+    let user = req.user || {};
     if (req.user == undefined) {
         user.status = 'offline'
     } else {
         user.status = 'online'
-        user.username = req.user.username
     }
-    console.log(user)
+    if (user.roll != 'admin') return res.redirect('/');
+    console.log(user);
 
     let restaurant = await fetch(`http://localhost:3000/api/getRestaurant/${req.params.name}`)
         .then(response => response.json());
-        console.log(restaurant)
+
     res.render('editRestaurant', {
         user: user,
         restaurant: restaurant.data[0]
@@ -130,11 +138,7 @@ router.get('/edit/:name', async (req, res, next) =>{
 });
 
 
-router.post('/edit/:oldName', async (req, res, next) =>{
-    console.log(req.params.oldName)
-    console.log(req.body.nameInput)
-    console.log(req.body.genreInput)
-    console.log(req.body.locationInput)
+router.post('/edit/:oldName', async (req, res, next) => {
     //res.redirect('/restaurants')
 
     let checkRestaurant = await fetch(`http://localhost:3000/api/checkRestaurant/${req.body.nameInput}`)
@@ -144,8 +148,8 @@ router.post('/edit/:oldName', async (req, res, next) =>{
         console.log('Restaurant already exists')
         return res.redirect('/restaurants');
     }
-        console.log('DOES NOT EXIST')
-        
+    console.log('DOES NOT EXIST')
+
     let restaurant = {
         oldName: req.params.oldName,
         newName: req.body.nameInput,
@@ -153,7 +157,7 @@ router.post('/edit/:oldName', async (req, res, next) =>{
         newLocation: req.body.locationInput
     }
 
-    
+
     await fetch(`http://localhost:3000/api/editRestaurant`, {
         method: 'PUT',
         headers: {
@@ -165,18 +169,19 @@ router.post('/edit/:oldName', async (req, res, next) =>{
         console.log('Restaurant updated');
         res.redirect('/restaurants');
     });
-    
-   //res.redirect('/restaurants');
+
+    //res.redirect('/restaurants');
 });
 
-router.get('/review', async (req, res, next) => {
-    let user = {}
+router.get('/review', authenticateToken, async (req, res, next) => {
+    let user = req.user || {};
     if (req.user == undefined) {
         user.status = 'offline'
     } else {
         user.status = 'online'
-        user.username = req.user.username
     }
+    if (user.status != 'online') return res.redirect('/login');
+    console.log(user);
 
     let restaurants = await fetch(`http://localhost:3000/api/getAllRestaurants`)
         .then(response => response.json());
@@ -187,9 +192,9 @@ router.get('/review', async (req, res, next) => {
 });
 
 router.post('/review', async function (req, res, next) {
-    
 
-    
+
+
     let review = {
         username: 'test',
         restaurantID: req.body.restaurantInput,
@@ -210,8 +215,8 @@ router.post('/review', async function (req, res, next) {
     });
 
     //return res.redirect('/restaurants/addRestaurants');
-    
-   res.redirect('/restaurants/review');
+
+    res.redirect('/restaurants/review');
 });
 
 module.exports = router;

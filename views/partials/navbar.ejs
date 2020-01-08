@@ -12,9 +12,11 @@
       <li class="nav-item">
         <a class="nav-link" href="/restaurants/review">Skriv en recension</a>
       </li>
+      <% if (user.roll == 'admin') { %>
       <li class="nav-item">
         <a class="nav-link" href="/restaurants/addRestaurants">Lägg till restaurang</a>
       </li>
+      <% } %>
 
     </ul>
   </div>

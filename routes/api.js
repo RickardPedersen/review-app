@@ -188,9 +188,7 @@ router.get('/getReviews/:restaurantID', (req, res, next) => {
     let responseObject = {
         response: "OK"
     }
-    console.log(req.params.restaurantID)
 
-    
     let sql = `SELECT * FROM reviews WHERE restaurantID = ${req.params.restaurantID}`;
 
     db.query(sql, (err, result) => {
@@ -219,7 +217,6 @@ router.post('/addReview', (req, res, next) => {
 
     db.query(sql, post, (err, result) => {
         if (err) throw err;
-        console.log(result)
         res.status(201).send(responseObject);
     });
 });

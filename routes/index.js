@@ -8,18 +8,18 @@ const fetch = require('node-fetch');
 const authenticateToken = require('../authorization-module');
 
 /* GET home page. */
-router.get('/', authenticateToken, function(req, res, next) {
-  console.log(req.user)
-  let user = {}
+router.get('/', authenticateToken, function (req, res, next) {
+  //console.log(req.user)
+  let user = req.user || {};
   if (req.user == undefined) {
     user.status = 'offline'
   } else {
     user.status = 'online'
-    user.username = req.user.username
   }
+  console.log(user);
   res.render('index', {
     user: user
-});
+  });
 });
 
 /*

@@ -17,8 +17,10 @@
                 <h5 class="card-title"><%= restaurant.location %></h5>
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                 <a href="/restaurants/review" class="btn btn-primary">Skriv recension</a>
+                <% if (user.roll == 'admin') { %>
                 <a href="/restaurants/edit/<%= restaurant.name %>" class="btn btn-warning">Redigera restaurang</a>
                 <a href="/restaurants/delete/<%= restaurant.name %>" class="btn btn-danger">Ta bort restaurang</a>
+                <% } %>
             </div>
         </div>
 

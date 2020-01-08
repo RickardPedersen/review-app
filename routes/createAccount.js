@@ -10,17 +10,16 @@ const authenticateToken = require('../authorization-module');
 const users = [];
 
 router.get('/', authenticateToken, function (req, res, next) {
-  let user = {}
+  let user = req.user || {};
   if (req.user == undefined) {
     user.status = 'offline'
   } else {
     user.status = 'online'
-    user.username = req.user.username
   }
-  console.log(user)
+  console.log(user);
   res.render('createAccount', {
     user: user
-});
+  });
 });
 
 
@@ -38,7 +37,7 @@ router.post('/', async function (req, res, next) {
 
     /* Check if user already exists */
     let checkUser = await fetch(`http://localhost:3000/api/getUser/${req.body.usernameInput}/${req.body.emailInput}`)
-    .then(response => response.json());
+      .then(response => response.json());
 
     if (checkUser.exists === true) {
       console.log('Username or email already in use')
