@@ -11,11 +11,19 @@
 
     <div class="container">
         <h1 class="display-4">Restauranger</h1>
-        <ul class="list-group">
+        <div class="list-group">
             <% for (restaurant of restaurants) { %>
-            <li class="list-group-item"><a href="/restaurants/restaurant/<%= restaurant.name %>"><%= restaurant.name %></a></li>
+
+            <a href="/restaurants/restaurant/<%= restaurant.name %>" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1"><%= restaurant.name %></h5>
+                  <h5 class="mb-1">Betyg: <%= restaurant.avgRating %> / 5</h5>
+                </div>
+                <p class="mb-1">asdfa</p>
+                <p class="mb-1">asdfa</p>
+              </a>
             <% } %>
-        </ul>
+        </div>
     </div>
 
     <% include ./partials/scripts %>

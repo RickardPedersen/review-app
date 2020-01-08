@@ -18,6 +18,8 @@ router.get('/', authenticateToken, async function (req, res, next) {
 
     let restaurants = await fetch(`http://localhost:3000/api/getAllRestaurants`)
         .then(response => response.json());
+
+        
     res.render('restaurants', {
         user: user,
         restaurants: restaurants.data
