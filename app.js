@@ -23,11 +23,11 @@ let app = express();
 
 const mysql = require('mysql');
 const db = mysql.createConnection({
-  host: 'localhost',
-  port: '10003',
-  user: 'root',
-  password: 'root',
-  database: 'review_app_db'
+  host: 'eu-cdbr-west-02.cleardb.net',
+  port: '3306',
+  user: 'b816fdd889160b',
+  password: 'fc887ec7',
+  database: 'heroku_b32b9209381304f'
 });
 db.connect((err) => {
   if (err) throw err;
