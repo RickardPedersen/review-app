@@ -87,7 +87,7 @@ router.get('/addRestaurants', authenticateToken, async function (req, res, next)
 
     if (user.roll != 'admin') return res.redirect('/');
 
-    let genres = await fetch(`${apiURL}/api/getGenres`)
+    let genres = await fetch(`${apiURL}/getGenres`)
         .then(response => response.json());
 
     res.render('addRestaurants', {
