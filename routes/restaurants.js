@@ -38,6 +38,8 @@ router.get('/restaurant/:name', authenticateToken, async function (req, res, nex
     let restaurant = await fetch(`http://localhost:3000/api/getRestaurant/${req.params.name}`)
         .then(response => response.json());
 
+    console.log(restaurant)
+
     let reviews = await fetch(`http://localhost:3000/api/getReviews/${restaurant.data[0].restaurantID}`)
         .then(response => response.json());
 
@@ -48,7 +50,7 @@ router.get('/restaurant/:name', authenticateToken, async function (req, res, nex
     });
 });
 
-router.get('/addRestaurants', authenticateToken, function (req, res, next) {
+router.get('/addRestaurants', authenticateToken, async function (req, res, next) {
     let user = req.user || {};
     if (req.user == undefined) {
         user.status = 'offline'
@@ -56,9 +58,15 @@ router.get('/addRestaurants', authenticateToken, function (req, res, next) {
         user.status = 'online'
     }
     console.log(user);
+
     if (user.roll != 'admin') return res.redirect('/');
+
+    let genres = await fetch(`http://localhost:3000/api/getGenres`)
+        .then(response => response.json());
+        console.log(genres);
     res.render('addRestaurants', {
-        user: user
+        user: user,
+        genres: genres.data
     });
 });
 
@@ -133,9 +141,14 @@ router.get('/edit/:name', authenticateToken, async (req, res, next) => {
     let restaurant = await fetch(`http://localhost:3000/api/getRestaurant/${req.params.name}`)
         .then(response => response.json());
 
+        let genres = await fetch(`http://localhost:3000/api/getGenres`)
+        .then(response => response.json());
+        console.log(genres);
+
     res.render('editRestaurant', {
         user: user,
-        restaurant: restaurant.data[0]
+        restaurant: restaurant.data[0],
+        genres: genres.data
     });
 });
 

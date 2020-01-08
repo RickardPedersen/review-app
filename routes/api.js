@@ -124,10 +124,12 @@ router.get('/getAllRestaurants', (req, res, next) => {
     //let sql = 'SELECT * FROM restaurants';
 
     let sql = 'SELECT *,' +
-              '(SELECT ROUND(AVG(rating), 1) FROM reviews ' +
-              'WHERE reviews.restaurantID = restaurants.restaurantID) AS avgRating ' +
-              'FROM restaurants ' +
-              'ORDER BY avgRating desc';
+        '(SELECT ROUND(AVG(rating), 1) ' +
+        'FROM reviews ' +
+        'WHERE reviews.restaurantID = restaurants.restaurantID) AS avgRating ' +
+        'FROM restaurants ' +
+        'ORDER BY avgRating desc ' +
+        'LIMIT 10';
 
     db.query(sql, (err, result) => {
         if (err) throw err;
@@ -144,7 +146,13 @@ router.get('/getRestaurant/:name', (req, res, next) => {
         response: "OK"
     }
 
-    let sql = `SELECT * FROM restaurants WHERE name = '${req.params.name}'`;
+    //let sql = `SELECT * FROM restaurants WHERE name = '${req.params.name}'`;
+
+    let sql = `SELECT *, 
+               (SELECT ROUND(AVG(rating), 1) FROM review_app_db.reviews 
+               WHERE review_app_db.reviews.restaurantID = review_app_db.restaurants.restaurantID) AS avgRating
+               FROM review_app_db.restaurants
+               WHERE name = '${req.params.name}'`
 
     db.query(sql, (err, result) => {
         if (err) throw err;
@@ -225,6 +233,22 @@ router.post('/addReview', (req, res, next) => {
     db.query(sql, post, (err, result) => {
         if (err) throw err;
         res.status(201).send(responseObject);
+    });
+});
+
+router.get('/getGenres', (req, res, next) => {
+    let db = req.db
+
+    let responseObject = {
+        response: "OK"
+    }
+
+    let sql = `SELECT * FROM genres`;
+
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        responseObject.data = result;
+        res.status(200).send(responseObject);
     });
 });
 

@@ -11,7 +11,7 @@
 
     <div class="container">
         <div class="card">
-            <h5 class="card-header"><%= restaurant.name %></h5>
+            <h5 class="card-header"><%= restaurant.name %> <%= restaurant.avgRating %> / 5</h5>
             <div class="card-body">
                 <h5 class="card-title"><%= restaurant.genre %></h5>
                 <h5 class="card-title"><%= restaurant.location %></h5>
@@ -31,7 +31,7 @@
             <a href="" class="list-group-item list-group-item-action">
               <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1"><%= review.username %></h5>
-                <h5 class="mb-1"><%= review.rating %>/5</h5>
+                <h5 class="mb-1"><%= review.rating %> / 5</h5>
               </div>
               <p class="mb-1"><%= review.message %></p>
             </a>

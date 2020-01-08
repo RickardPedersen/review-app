@@ -23,9 +23,9 @@
                 <label for="genreInput">Genre</label>
                 <select class="custom-select" id="genreInput" name="genreInput">
                     <option selected>Open this select menu</option>
-                    <option value="Pizza">Pizza</option>
-                    <option value="Hamburgare">Hamburgare</option>
-                    <option value="Sushi">Sushi</option>
+                    <% for (genre of genres) { %>
+                    <option value="<%= genre.genre %>"><%= genre.genre %></option>
+                    <% } %>
                 </select>
             </div>
 
