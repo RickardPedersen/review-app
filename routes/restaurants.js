@@ -153,7 +153,6 @@ router.get('/delete/:name', authenticateToken, async (req, res, next) => {
             name: req.params.name
         })
     }).then(response => response.json()).then(data => {
-        console.log(data)
         console.log('Restaurant deleted');
         res.redirect('/restaurants');
     });
