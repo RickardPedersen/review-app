@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ./partials/head %>
+</head>
+
+<body>
+    <% include ./partials/navbar %>
+
+
+    <div class="container">
+        <div class="card">
+            <h5 class="card-header"><%= restaurant.name %></h5>
+            <div class="card-body">
+              <h5 class="card-title"><%= restaurant.genre %></h5>
+              <h5 class="card-title"><%= restaurant.location %></h5>
+              <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+              <a href="#" class="btn btn-primary">Skriv recension</a>
+              <a href="#" class="btn btn-warning">Redigera restaurang</a>
+              <a href="#" class="btn btn-danger">Ta bort restaurang</a>
+            </div>
+          </div>
+    </div>
+
+    <% include ./partials/scripts %>
+</body>
+
+</html>

@@ -130,4 +130,20 @@ router.get('/getAllRestaurants', (req, res, next) => {
     });
 });
 
+router.get('/getRestaurant/:name', (req, res, next) => {
+    let db = req.db
+    
+    let responseObject = {
+        response: "OK"
+    }
+
+    let sql = `SELECT * FROM restaurants WHERE name = '${req.params.name}'`;
+
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        responseObject.data = result;
+        res.status(200).send(responseObject);
+    });
+});
+
 module.exports = router;
