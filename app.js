@@ -9,6 +9,7 @@ let logger = require('morgan');
 let indexRouter = require('./routes/index');
 let createAccountRouter = require('./routes/createAccount');
 let loginRouter = require('./routes/login');
+let restaurantsRouter = require('./routes/restaurants');
 let usersRouter = require('./routes/users');
 let apiRouter = require('./routes/api');
 
@@ -52,6 +53,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/createAccount', createAccountRouter);
 app.use('/login', loginRouter);
+app.use('/restaurants', restaurantsRouter);
 app.use('/users', usersRouter);
 app.use('/api', apiRouter);
 

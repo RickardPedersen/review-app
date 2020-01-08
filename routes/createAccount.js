@@ -5,6 +5,8 @@ const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const fetch = require('node-fetch');
 
+const authenticateToken = require('../authorization-module');
+
 const users = [];
 
 router.get('/', authenticateToken, function (req, res, next) {
@@ -59,6 +61,7 @@ router.post('/', async function (req, res, next) {
   }
 });
 
+/*
 function authenticateToken(req, res, next) {
   const token = req.cookies.accessToken;
   if (token == null) {
@@ -77,5 +80,6 @@ function authenticateToken(req, res, next) {
     });
   }
 }
+*/
 
 module.exports = router;

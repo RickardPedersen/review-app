@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <% include ./partials/head %>
+</head>
+
+<body>
+    <% include ./partials/navbar %>
+
+    <div class="container">
+        <form action="/restaurants/addRestaurants" method="POST">
+            <div class="form-group">
+                <label for="nameInput">Restaurangens namn</label>
+                <input type="text" class="form-control" id="nameInput" name="nameInput">
+            </div>
+            <div class="form-group">
+                <label for="locationInput">Stad</label>
+                <input type="text" class="form-control" id="locationInput" name="locationInput">
+            </div>
+            <div class="form-group">
+                <label for="genreInput">Genre</label>
+                <select class="custom-select" id="genreInput" name="genreInput">
+                    <option selected>Open this select menu</option>
+                    <option value="Pizza">Pizza</option>
+                    <option value="Hamburgare">Hamburgare</option>
+                    <option value="Sushi">Sushi</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <% include ./partials/scripts %>
+</body>
+
+</html>

@@ -74,4 +74,44 @@ router.get('/login/:email', function (req, res, next) {
     
 });
 
+/* Check if restaurant already exists */
+router.get('/checkRestaurant/:name', function (req, res, next) {
+    let db = req.db
+    
+    let responseObject = {
+        response: "OK",
+        exists: false
+    }
+
+    let sql = `SELECT * FROM restaurants WHERE name = '${req.params.name}'`;
+
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        if (result.length > 0) responseObject.exists = true;
+        res.status(200).send(responseObject);
+    });
+});
+
+router.post('/addRestaurant', (req, res, next) => {
+    let db = req.db
+
+    let responseObject = {
+        response: "Created",
+    }
+
+    let post = {
+        name: req.body.name,
+        genre: req.body.genre,
+        location: req.body.location
+    }
+
+    let sql = 'INSERT INTO restaurants SET ?';
+
+    db.query(sql, post, (err, result) => {
+        if (err) throw err;
+        console.log(result)
+        res.status(201).send(responseObject);
+    });
+});
+
 module.exports = router;
