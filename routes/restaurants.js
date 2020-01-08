@@ -3,6 +3,9 @@ var router = express.Router();
 
 const fetch = require('node-fetch');
 
+const httpPort = process.env.PORT || 3000;
+const apiURL = `http://localhost:${httpPort}/api`
+
 const authenticateToken = require('../authorization-module');
 
 router.get('/', authenticateToken, async function (req, res, next) {
@@ -13,10 +16,10 @@ router.get('/', authenticateToken, async function (req, res, next) {
         user.status = 'online'
     }
 
-    let restaurants = await fetch(`http://localhost:3000/api/getRestaurants`)
+    let restaurants = await fetch(`${apiURL}/getRestaurants`)
         .then(response => response.json());
 
-    let genres = await fetch(`http://localhost:3000/api/getGenres`)
+    let genres = await fetch(`${apiURL}/getGenres`)
         .then(response => response.json());
 
     res.render('restaurants', {
@@ -39,10 +42,10 @@ router.get('/genres/:genre', authenticateToken, async (req, res, next) => {
         user.status = 'online'
     }
 
-    let restaurants = await fetch(`http://localhost:3000/api/getRestaurantsByGenre/${req.params.genre}`)
+    let restaurants = await fetch(`${apiURL}/getRestaurantsByGenre/${req.params.genre}`)
         .then(response => response.json());
 
-    let genres = await fetch(`http://localhost:3000/api/getGenres`)
+    let genres = await fetch(`${apiURL}/api/getGenres`)
         .then(response => response.json());
 
     res.render('restaurants', {
@@ -61,10 +64,10 @@ router.get('/restaurant/:name', authenticateToken, async function (req, res, nex
         user.status = 'online'
     }
 
-    let restaurant = await fetch(`http://localhost:3000/api/getRestaurant/${req.params.name}`)
+    let restaurant = await fetch(`${apiURL}/getRestaurant/${req.params.name}`)
         .then(response => response.json());
 
-    let reviews = await fetch(`http://localhost:3000/api/getReviews/${restaurant.data[0].restaurantID}`)
+    let reviews = await fetch(`${apiURL}/getReviews/${restaurant.data[0].restaurantID}`)
         .then(response => response.json());
 
     res.render('restaurant', {
@@ -84,7 +87,7 @@ router.get('/addRestaurants', authenticateToken, async function (req, res, next)
 
     if (user.roll != 'admin') return res.redirect('/');
 
-    let genres = await fetch(`http://localhost:3000/api/getGenres`)
+    let genres = await fetch(`${apiURL}/api/getGenres`)
         .then(response => response.json());
 
     res.render('addRestaurants', {
@@ -95,7 +98,7 @@ router.get('/addRestaurants', authenticateToken, async function (req, res, next)
 
 router.post('/addRestaurants', async function (req, res, next) {
 
-    let checkRestaurant = await fetch(`http://localhost:3000/api/checkRestaurant/${req.body.nameInput}`)
+    let checkRestaurant = await fetch(`${apiURL}/checkRestaurant/${req.body.nameInput}`)
         .then(response => response.json());
 
     if (checkRestaurant.exists === true) {
@@ -109,7 +112,7 @@ router.post('/addRestaurants', async function (req, res, next) {
         location: req.body.locationInput
     }
 
-    await fetch('http://localhost:3000/api/addRestaurant', {
+    await fetch(`${apiURL}/addRestaurant`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -132,7 +135,7 @@ router.get('/delete/:name', authenticateToken, async (req, res, next) => {
 
     if (user.roll !== 'admin') return res.redirect('/');
 
-    await fetch(`http://localhost:3000/api/deleteRestaurant`, {
+    await fetch(`${apiURL}/deleteRestaurant`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json'
@@ -155,10 +158,10 @@ router.get('/edit/:name', authenticateToken, async (req, res, next) => {
     }
     if (user.roll != 'admin') return res.redirect('/');
 
-    let restaurant = await fetch(`http://localhost:3000/api/getRestaurant/${req.params.name}`)
+    let restaurant = await fetch(`${apiURL}/getRestaurant/${req.params.name}`)
         .then(response => response.json());
 
-    let genres = await fetch(`http://localhost:3000/api/getGenres`)
+    let genres = await fetch(`${apiURL}/getGenres`)
         .then(response => response.json());
 
     res.render('editRestaurant', {
@@ -170,7 +173,7 @@ router.get('/edit/:name', authenticateToken, async (req, res, next) => {
 
 
 router.post('/edit/:oldName', async (req, res, next) => {
-    let checkRestaurant = await fetch(`http://localhost:3000/api/checkRestaurant/${req.body.nameInput}`)
+    let checkRestaurant = await fetch(`${apiURL}/checkRestaurant/${req.body.nameInput}`)
         .then(response => response.json());
 
     if (checkRestaurant.exists === true && req.params.oldName !== req.body.nameInput) {
@@ -187,7 +190,7 @@ router.post('/edit/:oldName', async (req, res, next) => {
     }
 
 
-    await fetch(`http://localhost:3000/api/editRestaurant`, {
+    await fetch(`${apiURL}/editRestaurant`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -208,7 +211,7 @@ router.get('/review', authenticateToken, async (req, res, next) => {
     }
     if (user.status != 'online') return res.redirect('/login');
 
-    let restaurants = await fetch(`http://localhost:3000/api/getRestaurants`)
+    let restaurants = await fetch(`${apiURL}/getRestaurants`)
         .then(response => response.json());
     res.render('review', {
         user: user,
@@ -232,7 +235,7 @@ router.post('/review', authenticateToken, async function (req, res, next) {
         message: req.body.messageInput
     }
 
-    await fetch('http://localhost:3000/api/addReview', {
+    await fetch(`${apiURL}/addReview`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

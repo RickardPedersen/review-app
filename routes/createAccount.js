@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
+const httpPort = process.env.PORT || 3000;
+const apiURL = `http://localhost:${httpPort}/api`
+
 const bcryptjs = require('bcryptjs');
 const fetch = require('node-fetch');
 
@@ -32,7 +35,7 @@ router.post('/', async function (req, res, next) {
     };
 
     /* Check if user already exists */
-    let checkUser = await fetch(`http://localhost:3000/api/getUser/${req.body.usernameInput}/${req.body.emailInput}`)
+    let checkUser = await fetch(`${apiURL}/getUser/${req.body.usernameInput}/${req.body.emailInput}`)
       .then(response => response.json());
 
     if (checkUser.exists === true) {
@@ -41,7 +44,7 @@ router.post('/', async function (req, res, next) {
     };
 
     /* Create user */
-    await fetch('http://localhost:3000/api/createAccount', {
+    await fetch(`${apiURL}/createAccount`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

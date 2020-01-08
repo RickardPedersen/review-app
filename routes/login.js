@@ -5,6 +5,9 @@ const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const fetch = require('node-fetch');
 
+const httpPort = process.env.PORT || 3000;
+const apiURL = `http://localhost:${httpPort}/api`
+
 const authenticateToken = require('../authorization-module');
 
 router.get('/logout', (req, res) => {
@@ -28,7 +31,7 @@ router.get('/', authenticateToken, function (req, res, next) {
 /* Log in user */
 router.post('/', async (req, res, next) => {
   /* Check if email exists */
-  let userData = await fetch(`http://localhost:3000/api/login/${req.body.emailInput}`)
+  let userData = await fetch(`${apiURL}/login/${req.body.emailInput}`)
     .then(response => response.json());
 
   // userData.response == 'Not Found'

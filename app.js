@@ -14,6 +14,9 @@ let apiRouter = require('./routes/api');
 
 let app = express();
 
+const httpPort = process.env.PORT || 3000;
+const apiURL = `http://localhost:${httpPort}/api`
+
 
 /* MySQL connection pool */
 const mysql = require('mysql');
