@@ -183,8 +183,6 @@ router.get('/edit/:name', authenticateToken, async (req, res, next) => {
 
 
 router.post('/edit/:oldName', async (req, res, next) => {
-    //res.redirect('/restaurants')
-
     let checkRestaurant = await fetch(`http://localhost:3000/api/checkRestaurant/${req.body.nameInput}`)
         .then(response => response.json());
 
