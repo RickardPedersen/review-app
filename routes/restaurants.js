@@ -71,8 +71,6 @@ router.get('/restaurant/:name', authenticateToken, async function (req, res, nex
     let restaurant = await fetch(`http://localhost:3000/api/getRestaurant/${req.params.name}`)
         .then(response => response.json());
 
-    console.log(restaurant)
-
     let reviews = await fetch(`http://localhost:3000/api/getReviews/${restaurant.data[0].restaurantID}`)
         .then(response => response.json());
 
