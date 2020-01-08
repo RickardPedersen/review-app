@@ -36,7 +36,7 @@ router.post('/genres', (req, res, next) => {
     res.redirect(`/restaurants/genres/${req.body.genreInput}`);
 })
 
-router.get('/genres/:genre', async (req, res, next) => {
+router.get('/genres/:genre', authenticateToken, async (req, res, next) => {
     let user = req.user || {};
     if (req.user == undefined) {
         user.status = 'offline'
@@ -50,8 +50,7 @@ router.get('/genres/:genre', async (req, res, next) => {
 
     let genres = await fetch(`http://localhost:3000/api/getGenres`)
     .then(response => response.json());
-    console.log(genres)
-    console.log(req.params.genre)
+    
     res.render('restaurants', {
         user: user,
         restaurants: restaurants.data,
