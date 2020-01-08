@@ -10,25 +10,21 @@ let indexRouter = require('./routes/index');
 let createAccountRouter = require('./routes/createAccount');
 let loginRouter = require('./routes/login');
 let restaurantsRouter = require('./routes/restaurants');
-let usersRouter = require('./routes/users');
 let apiRouter = require('./routes/api');
-
-const bcryptjs = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const fetch = require('node-fetch');
 
 let app = express();
 
-// MySQL stuff
 
+/* MySQL connection */
 const mysql = require('mysql');
 const db = mysql.createConnection({
-  host: 'eu-cdbr-west-02.cleardb.net',
-  port: '3306',
-  user: 'b816fdd889160b',
-  password: 'fc887ec7',
-  database: 'heroku_b32b9209381304f'
+  host: process.env.MYSQL_HOST,
+  port: process.env.MYSQL_PORT,
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DATABASE
 });
+
 db.connect((err) => {
   if (err) throw err;
   console.log('Connected to db!');
@@ -46,7 +42,9 @@ app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({
+  extended: false
+}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -54,16 +52,15 @@ app.use('/', indexRouter);
 app.use('/createAccount', createAccountRouter);
 app.use('/login', loginRouter);
 app.use('/restaurants', restaurantsRouter);
-app.use('/users', usersRouter);
 app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

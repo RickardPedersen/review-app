@@ -2,52 +2,52 @@
 <html>
 
 <head>
-    <% include ./partials/head %>
+  <% include ./partials/head %>
 </head>
 
 <body>
-    <% include ./partials/navbar %>
+  <% include ./partials/navbar %>
 
 
-    <div class="container">
-        <div class="card">
-          <h5 class="card-header"><%= restaurant.name %> 
-            <% if (restaurant.avgRating != null) { %>
-              <span class="badge badge-info"><%= restaurant.avgRating %> / 5</span>
-              
-              <% } else { %>
-                  <span class="badge badge-secondary">Inget betyg</span>
-              
-              <% } %>
-          
-            </h5>
-            <div class="card-body">
-                <h5 class="card-title"><%= restaurant.location %></h5>
-                <h5 class="card-title"><%= restaurant.genre %></h5>
-                <a href="/restaurants/review" class="btn btn-primary">Skriv recension</a>
-                <% if (user.roll == 'admin') { %>
-                <a href="/restaurants/edit/<%= restaurant.name %>" class="btn btn-warning">Redigera restaurang</a>
-                <a href="/restaurants/delete/<%= restaurant.name %>" class="btn btn-danger">Ta bort restaurang</a>
-                <% } %>
-            </div>
-        </div>
+  <div class="container">
+    <div class="card">
+      <h5 class="card-header"><%= restaurant.name %>
+        <% if (restaurant.avgRating != null) { %>
+        <span class="badge badge-info"><%= restaurant.avgRating %> / 5</span>
 
-        <h1 class="display-4">Recensioner:</h1>
+        <% } else { %>
+        <span class="badge badge-secondary">Inget betyg</span>
 
-        <div class="list-group">
-            <% for (review of reviews) { %>
-            <a href="" class="list-group-item list-group-item-action">
-              <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1"><%= review.username %></h5>
-                <h5 class="mb-1"><%= review.rating %> / 5</h5>
-              </div>
-              <p class="mb-1"><%= review.message %></p>
-            </a>
-            <% } %>
-          </div>
+        <% } %>
+
+      </h5>
+      <div class="card-body">
+        <h5 class="card-title"><%= restaurant.location %></h5>
+        <h5 class="card-title"><%= restaurant.genre %></h5>
+        <a href="/restaurants/review" class="btn btn-primary">Skriv recension</a>
+        <% if (user.roll == 'admin') { %>
+        <a href="/restaurants/edit/<%= restaurant.name %>" class="btn btn-warning">Redigera restaurang</a>
+        <a href="/restaurants/delete/<%= restaurant.name %>" class="btn btn-danger">Ta bort restaurang</a>
+        <% } %>
+      </div>
     </div>
 
-    <% include ./partials/scripts %>
+    <h1 class="display-4">Recensioner:</h1>
+
+    <div class="list-group">
+      <% for (review of reviews) { %>
+      <a href="" class="list-group-item list-group-item-action">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1"><%= review.username %></h5>
+          <h5 class="mb-1"><%= review.rating %> / 5</h5>
+        </div>
+        <p class="mb-1"><%= review.message %></p>
+      </a>
+      <% } %>
+    </div>
+  </div>
+
+  <% include ./partials/scripts %>
 </body>
 
 </html>

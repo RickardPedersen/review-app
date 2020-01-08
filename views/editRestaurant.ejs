@@ -17,14 +17,15 @@
             </div>
             <div class="form-group">
                 <label for="locationInput">Stad</label>
-                <input type="text" class="form-control" id="locationInput" name="locationInput" value="<%= restaurant.location %>">
+                <input type="text" class="form-control" id="locationInput" name="locationInput"
+                    value="<%= restaurant.location %>">
             </div>
             <div class="form-group">
                 <label for="genreInput">Genre</label>
                 <select class="custom-select" id="genreInput" name="genreInput">
                     <option value="<%= restaurant.genre %>" selected><%= restaurant.genre %></option>
                     <% for (genre of genres) { %>
-                        <option value="<%= genre.genre %>"><%= genre.genre %></option>
+                    <option value="<%= genre.genre %>"><%= genre.genre %></option>
                     <% } %>
                 </select>
             </div>

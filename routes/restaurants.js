@@ -1,8 +1,6 @@
 var express = require('express');
 var router = express.Router();
 
-const bcryptjs = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const fetch = require('node-fetch');
 
 const authenticateToken = require('../authorization-module');
@@ -14,16 +12,13 @@ router.get('/', authenticateToken, async function (req, res, next) {
     } else {
         user.status = 'online'
     }
-    console.log(user);
 
     let restaurants = await fetch(`http://localhost:3000/api/getRestaurants`)
         .then(response => response.json());
 
     let genres = await fetch(`http://localhost:3000/api/getGenres`)
-    .then(response => response.json());
-    console.log(genres)
+        .then(response => response.json());
 
-        
     res.render('restaurants', {
         user: user,
         restaurants: restaurants.data,
@@ -43,14 +38,13 @@ router.get('/genres/:genre', authenticateToken, async (req, res, next) => {
     } else {
         user.status = 'online'
     }
-    console.log(user);
 
     let restaurants = await fetch(`http://localhost:3000/api/getRestaurantsByGenre/${req.params.genre}`)
         .then(response => response.json());
 
     let genres = await fetch(`http://localhost:3000/api/getGenres`)
-    .then(response => response.json());
-    
+        .then(response => response.json());
+
     res.render('restaurants', {
         user: user,
         restaurants: restaurants.data,
@@ -66,7 +60,6 @@ router.get('/restaurant/:name', authenticateToken, async function (req, res, nex
     } else {
         user.status = 'online'
     }
-    console.log(user);
 
     let restaurant = await fetch(`http://localhost:3000/api/getRestaurant/${req.params.name}`)
         .then(response => response.json());
@@ -88,13 +81,12 @@ router.get('/addRestaurants', authenticateToken, async function (req, res, next)
     } else {
         user.status = 'online'
     }
-    console.log(user);
 
     if (user.roll != 'admin') return res.redirect('/');
 
     let genres = await fetch(`http://localhost:3000/api/getGenres`)
         .then(response => response.json());
-        console.log(genres);
+
     res.render('addRestaurants', {
         user: user,
         genres: genres.data
@@ -124,13 +116,10 @@ router.post('/addRestaurants', async function (req, res, next) {
         },
         body: JSON.stringify(restaurant)
     }).then(response => response.json()).then(data => {
-        console.log(data)
         console.log('Account created');
     });
 
-    console.log('LEDIG')
     return res.redirect('/restaurants/addRestaurants');
-
 });
 
 router.get('/delete/:name', authenticateToken, async (req, res, next) => {
@@ -140,9 +129,8 @@ router.get('/delete/:name', authenticateToken, async (req, res, next) => {
     } else {
         user.status = 'online'
     }
-    console.log(user);
+
     if (user.roll !== 'admin') return res.redirect('/');
-    
 
     await fetch(`http://localhost:3000/api/deleteRestaurant`, {
         method: 'DELETE',
@@ -166,12 +154,11 @@ router.get('/edit/:name', authenticateToken, async (req, res, next) => {
         user.status = 'online'
     }
     if (user.roll != 'admin') return res.redirect('/');
-    console.log(user);
 
     let restaurant = await fetch(`http://localhost:3000/api/getRestaurant/${req.params.name}`)
         .then(response => response.json());
 
-        let genres = await fetch(`http://localhost:3000/api/getGenres`)
+    let genres = await fetch(`http://localhost:3000/api/getGenres`)
         .then(response => response.json());
 
     res.render('editRestaurant', {
@@ -207,12 +194,9 @@ router.post('/edit/:oldName', async (req, res, next) => {
         },
         body: JSON.stringify(restaurant)
     }).then(response => response.json()).then(data => {
-        console.log(data)
         console.log('Restaurant updated');
         res.redirect('/restaurants');
     });
-
-    //res.redirect('/restaurants');
 });
 
 router.get('/review', authenticateToken, async (req, res, next) => {
@@ -223,7 +207,6 @@ router.get('/review', authenticateToken, async (req, res, next) => {
         user.status = 'online'
     }
     if (user.status != 'online') return res.redirect('/login');
-    console.log(user);
 
     let restaurants = await fetch(`http://localhost:3000/api/getRestaurants`)
         .then(response => response.json());
@@ -241,7 +224,6 @@ router.post('/review', authenticateToken, async function (req, res, next) {
         user.status = 'online'
     }
     if (user.status != 'online') return res.redirect('/login');
-    console.log(user);
 
     let review = {
         username: user.username,
@@ -249,7 +231,6 @@ router.post('/review', authenticateToken, async function (req, res, next) {
         rating: req.body.ratingInput,
         message: req.body.messageInput
     }
-    //console.log(review)
 
     await fetch('http://localhost:3000/api/addReview', {
         method: 'POST',
@@ -258,11 +239,8 @@ router.post('/review', authenticateToken, async function (req, res, next) {
         },
         body: JSON.stringify(review)
     }).then(response => response.json()).then(data => {
-        console.log(data)
         console.log('Review created');
     });
-
-    //return res.redirect('/restaurants/addRestaurants');
 
     res.redirect('/restaurants/review');
 });

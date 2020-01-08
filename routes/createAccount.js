@@ -2,12 +2,9 @@ var express = require('express');
 var router = express.Router();
 
 const bcryptjs = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const fetch = require('node-fetch');
 
 const authenticateToken = require('../authorization-module');
-
-const users = [];
 
 router.get('/', authenticateToken, function (req, res, next) {
   let user = req.user || {};
@@ -16,7 +13,7 @@ router.get('/', authenticateToken, function (req, res, next) {
   } else {
     user.status = 'online'
   }
-  console.log(user);
+
   res.render('createAccount', {
     user: user
   });
@@ -33,7 +30,6 @@ router.post('/', async function (req, res, next) {
       password: hashedPassword,
       roll: 'user'
     };
-    users.push(user);
 
     /* Check if user already exists */
     let checkUser = await fetch(`http://localhost:3000/api/getUser/${req.body.usernameInput}/${req.body.emailInput}`)
@@ -52,7 +48,6 @@ router.post('/', async function (req, res, next) {
       },
       body: JSON.stringify(user)
     }).then(response => response.json()).then(data => {
-      console.log(data)
       console.log('Account created');
     });
 
@@ -61,26 +56,5 @@ router.post('/', async function (req, res, next) {
     res.status(500).send();
   }
 });
-
-/*
-function authenticateToken(req, res, next) {
-  const token = req.cookies.accessToken;
-  if (token == null) {
-    console.log('no token')
-    next();
-  } else {
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-      if (err) {
-        console.log('invalid token')
-        next();
-      } else {
-        console.log('YOU ARE AUTHORIZED')
-        req.user = user;
-        next();
-      }
-    });
-  }
-}
-*/
 
 module.exports = router;
