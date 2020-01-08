@@ -15,7 +15,7 @@ router.get('/getUser/:username/:email', function (req, res, next) {
         exists: false
     }
 
-    let sql = `SELECT * FROM users WHERE username = '${req.params.username}' OR email = '${req.params.email}'`;
+    let sql = `SELECT * FROM users WHERE username = ${db.escape(req.params.username)} OR email = ${db.escape(req.params.email)}`;
 
     db.query(sql, (err, result) => {
         if (err) throw err;
@@ -57,7 +57,7 @@ router.get('/login/:email', function (req, res, next) {
         response: "OK"
     }
 
-    let sql = `SELECT * FROM users WHERE email = '${req.params.email}'`;
+    let sql = `SELECT * FROM users WHERE email = ${db.escape(req.params.email)}`;
 
     db.query(sql, (err, result) => {
         if (err) throw err;
@@ -83,7 +83,7 @@ router.get('/checkRestaurant/:name', function (req, res, next) {
         exists: false
     }
 
-    let sql = `SELECT * FROM restaurants WHERE name = '${req.params.name}'`;
+    let sql = `SELECT * FROM restaurants WHERE name = ${db.escape(req.params.name)}`;
 
     db.query(sql, (err, result) => {
         if (err) throw err;
@@ -177,7 +177,7 @@ router.get('/getRestaurant/:name', (req, res, next) => {
                (SELECT ROUND(AVG(rating), 1) FROM review_app_db.reviews 
                WHERE review_app_db.reviews.restaurantID = review_app_db.restaurants.restaurantID) AS avgRating
                FROM review_app_db.restaurants
-               WHERE name = '${req.params.name}'`
+               WHERE name = ${db.escape(req.params.name)}`
 
     db.query(sql, (err, result) => {
         if (err) throw err;
@@ -193,7 +193,7 @@ router.delete('/deleteRestaurant', (req, res, next) => {
         response: "OK"
     }
 
-    let sql = `DELETE FROM restaurants WHERE name = '${req.body.name}'`;
+    let sql = `DELETE FROM restaurants WHERE name = ${db.escape(req.body.name)}`;
 
     db.query(sql, (err, result) => {
         if (err) throw err;
@@ -211,8 +211,8 @@ router.put('/editRestaurant', (req, res, next) => {
     }
 
     let sql = `UPDATE restaurants
-               SET name = '${req.body.newName}', genre = '${req.body.newGenre}', location = '${req.body.newLocation}'
-               WHERE name = '${req.body.oldName}'`;
+               SET name = ${db.escape(req.body.newName)}, genre = ${db.escape(req.body.newGenre)}, location = ${db.escape(req.body.newLocation)}
+               WHERE name = ${db.escape(req.body.oldName)}`;
 
     db.query(sql, (err, result) => {
         if (err) throw err;
@@ -229,7 +229,7 @@ router.get('/getReviews/:restaurantID', (req, res, next) => {
         response: "OK"
     }
 
-    let sql = `SELECT * FROM reviews WHERE restaurantID = ${req.params.restaurantID}`;
+    let sql = `SELECT * FROM reviews WHERE restaurantID = ${db.escape(req.params.restaurantID)}`;
 
     db.query(sql, (err, result) => {
         if (err) throw err;
@@ -268,7 +268,7 @@ router.get('/getGenres', (req, res, next) => {
         response: "OK"
     }
 
-    let sql = `SELECT * FROM genres`;
+    let sql = 'SELECT * FROM genres';
 
     db.query(sql, (err, result) => {
         if (err) throw err;
