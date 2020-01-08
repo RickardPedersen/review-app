@@ -9,6 +9,7 @@
   <% include ./partials/navbar %>
 
   <div class="container">
+    <h1 class="display-4">Skapa konto</h1>
     <form action="/createAccount" method="POST">
         <div class="form-group">
           <label for="usernameInput">Användarnamn</label>
@@ -21,10 +22,6 @@
         <div class="form-group">
           <label for="passwordInput">Password</label>
           <input type="password" class="form-control" id="passwordInput" name="passwordInput">
-        </div>
-        <div class="form-group form-check">
-          <input type="checkbox" class="form-check-input" id="exampleCheck1">
-          <label class="form-check-label" for="exampleCheck1">Check me out</label>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
