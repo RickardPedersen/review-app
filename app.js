@@ -17,6 +17,8 @@ let app = express();
 
 /* MySQL connection pool */
 const mysql = require('mysql');
+const db = mysql.createPool(process.env.CLEARDB_DATABASE_URL)
+/*
 const db = mysql.createPool({
   connectionLimit : 10,
   host: process.env.MYSQL_HOST,
@@ -25,6 +27,7 @@ const db = mysql.createPool({
   password: process.env.MYSQL_PASSWORD,
   database: process.env.MYSQL_DATABASE
 });
+*/
 
 app.use(function (req, res, next) {
   req.db = db;
