@@ -211,7 +211,7 @@ router.get('/review', authenticateToken, async (req, res, next) => {
     }
     if (user.status != 'online') return res.redirect('/login');
 
-    let restaurants = await fetch(`${apiURL}/getRestaurants`)
+    let restaurants = await fetch(`${apiURL}/getAllRestaurants`)
         .then(response => response.json());
     res.render('review', {
         user: user,
