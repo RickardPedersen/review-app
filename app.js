@@ -14,29 +14,14 @@ let apiRouter = require('./routes/api');
 
 let app = express();
 
-const httpPort = process.env.PORT || 3000;
-const apiURL = `http://localhost:${httpPort}/api`
-
-
 /* MySQL connection pool */
 const mysql = require('mysql');
-const db = mysql.createPool(process.env.CLEARDB_DATABASE_URL)
-/*
-const db = mysql.createPool({
-  connectionLimit : 10,
-  host: process.env.MYSQL_HOST,
-  port: process.env.MYSQL_PORT,
-  user: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DATABASE
-});
-*/
+const db = mysql.createPool(process.env.CLEARDB_DATABASE_URL);
 
 app.use(function (req, res, next) {
   req.db = db;
   next();
 });
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
