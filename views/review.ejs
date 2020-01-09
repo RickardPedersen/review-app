@@ -14,7 +14,7 @@
             <div class="form-group">
                 <label for="restaurantInput">Restaurang</label>
                 <select class="custom-select" id="restaurantInput" name="restaurantInput">
-                    <option selected>Open this select menu</option>
+                    <option value="0" selected>Välj restaurang</option>
                     <% for (restaurant of restaurants) { %>
                     <option value="<%= restaurant.restaurantID %>"><%= restaurant.name %></option>
                     <% } %>
