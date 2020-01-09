@@ -45,7 +45,7 @@ router.get('/genres/:genre', authenticateToken, async (req, res, next) => {
     let restaurants = await fetch(`${apiURL}/getRestaurantsByGenre/${req.params.genre}`)
         .then(response => response.json());
 
-    let genres = await fetch(`${apiURL}/api/getGenres`)
+    let genres = await fetch(`${apiURL}/getGenres`)
         .then(response => response.json());
 
     res.render('restaurants', {
