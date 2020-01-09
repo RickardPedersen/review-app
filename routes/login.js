@@ -52,10 +52,10 @@ router.post('/', async (req, res, next) => {
       }
 
       const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: '600s'
+        expiresIn: '3600s'
       });
       res.cookie('accessToken', accessToken, {
-        maxAge: 600000,
+        maxAge: 3600000,
         httpOnly: true
       });
 
