@@ -54,7 +54,7 @@ router.post('/', async function (req, res, next) {
       console.log('Account created');
     });
 
-    res.redirect('/createAccount');
+    res.redirect('/login');
   } catch {
     res.status(500).send();
   }

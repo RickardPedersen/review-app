@@ -119,10 +119,10 @@ router.post('/addRestaurants', async function (req, res, next) {
         },
         body: JSON.stringify(restaurant)
     }).then(response => response.json()).then(data => {
-        console.log('Account created');
+        console.log('Restaurant created');
     });
 
-    return res.redirect('/restaurants/addRestaurants');
+    return res.redirect('/restaurants');
 });
 
 router.get('/delete/:name', authenticateToken, async (req, res, next) => {
@@ -245,7 +245,7 @@ router.post('/review', authenticateToken, async function (req, res, next) {
         console.log('Review created');
     });
 
-    res.redirect('/restaurants/review');
+    res.redirect('/restaurants');
 });
 
 module.exports = router;

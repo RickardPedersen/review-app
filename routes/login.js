@@ -12,7 +12,7 @@ const authenticateToken = require('../authorization-module');
 
 router.get('/logout', (req, res) => {
   res.clearCookie('accessToken');
-  return res.redirect('/');
+  return res.redirect('/login');
 });
 
 /* GET login page. */
@@ -59,7 +59,7 @@ router.post('/', async (req, res, next) => {
         httpOnly: true
       });
 
-      return res.redirect('/login');
+      return res.redirect('/');
     } else {
       console.log('Wrong password');
       return res.redirect('/login');
